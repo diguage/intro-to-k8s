@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: retry-config
+data:
+  retry-count: "3"
+  timeout: "500ms"

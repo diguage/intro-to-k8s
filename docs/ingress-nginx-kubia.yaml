@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1beta1
+#apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: demo.diguage.com-nginx-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+    - host: "demo.diguage.com"
+      http:
+        paths:
+          - path: /
+            backend:
+              # 新版协议？
+              serviceName: kubia-service
+              servicePort: 80

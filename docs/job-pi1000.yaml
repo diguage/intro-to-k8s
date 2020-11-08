@@ -1,0 +1,15 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pi1000
+spec:
+  completions: 1 # 设置完成次数，默认为1
+  parallelism: 1 # 设置并发次数，默认为1
+  template:
+    spec:
+      containers:
+        - name: pi
+          image: perl
+          command: [ "perl",  "-Mbignum=bpi", "-wle", "print bpi(1000)" ]
+      restartPolicy: Never
+  backoffLimit: 4

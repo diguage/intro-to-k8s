@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubia-deployment
+  labels:
+    app: kubia
+    env: product
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kubia
+  template:
+    metadata:
+      labels:
+        app: kubia
+    spec:
+      containers:
+        - name: diguage-kubia
+          image: diguage/kubia
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          env:
+            - name: RETRY_CONFIG_COUNT
+              valueFrom:
+                configMapKeyRef:
+                  name: retry-config
+                  key: retry-count
+            - name: RETRY_CONFIG_TIMEOUT
+              valueFrom:
+                configMapKeyRef:
+                  name: retry-config
+                  key: timeout
+            - name: SECRET_DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: secret-db-user
+                  key: username
+            - name: SECRET_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secret-db-user
+                  key: password
+          volumeMounts:
+            - name: retry-config
+              mountPath: /retry-config.conf
+              readOnly: true
+            - name: db-user
+              mountPath: /db-user.conf
+              readOnly: true
+      volumes:
+        - name: retry-config
+          configMap:
+            name: retry-config
+        - name: db-user
+          secret:
+            secretName: secret-db-user
+            items:
+              - key: username
+                path: db/username
+              - key: password
+                path: db/password

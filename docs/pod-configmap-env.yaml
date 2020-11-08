@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: diguage-manual
+spec:
+  containers:
+    - name: diguage/kubia
+      ports:
+        - containerPort: 8080
+          protocol: TCP
